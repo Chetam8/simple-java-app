@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // Make sure Jenkins has Maven installed & named "Maven3"
-        jdk 'JDK11'      // Make sure Jenkins has JDK installed & named "JDK11"
+        maven 'Maven3'   // Make sure Maven is installed and configured in Jenkins
+        jdk 'JDK17'      // Use JDK version available in Jenkins
     }
 
     stages {
@@ -15,7 +15,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean install'
             }
         }
 
@@ -23,6 +23,21 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build completed successfully'
+        }
+        failure {
+            echo 'Build failed ❌'
         }
     }
 }
