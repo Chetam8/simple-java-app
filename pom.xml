@@ -7,7 +7,7 @@
     <groupId>com.example</groupId>
     <artifactId>demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Simple Java App</name>
+    <name>Simple Java Application</name>
     <description>Just prints "Application is up and running well."</description>
 
     <properties>
