@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // Make sure Maven is installed and configured in Jenkins
-        jdk 'Java17'      
+        maven 'Maven3'    // Matches the Maven name configured in Jenkins
+        jdk 'Java17'      // Matches the JDK name you configured
     }
 
     stages {
@@ -34,10 +34,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build completed successfully'
+            echo ' Build completed successfully'
         }
         failure {
-            echo 'Build failed '
+            echo ' Build failed'
         }
     }
 }
