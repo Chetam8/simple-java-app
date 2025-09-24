@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         maven 'Maven3'   // Make sure Maven is installed and configured in Jenkins
-        jdk 'JDK17'      
+        jdk 'Java17'      
     }
 
     stages {
@@ -37,7 +37,7 @@ pipeline {
             echo 'Build completed successfully'
         }
         failure {
-            echo 'Build failed ❌'
+            echo 'Build failed '
         }
     }
 }
