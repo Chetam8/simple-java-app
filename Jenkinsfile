@@ -9,6 +9,9 @@ pipeline {
     environment {
         JAVA_HOME = tool name: 'Java17', type: 'jdk'
         PATH = "${JAVA_HOME}/bin:${env.PATH}"
+        AWS_REGION = 'us-east-1' // change to your AWS region
+        ECR_REPO = '375539415994.dkr.ecr.us-east-1.amazonaws.com/simple-repo' // replace with your ECR repo URI
+        IMAGE_TAG = 'latest'
     }
 
     stages {
@@ -43,14 +46,33 @@ pipeline {
                 sh 'mvn package'
             }
         }
+
+        // --- Docker stages ---
+        stage('Docker Build') {
+            steps {
+                echo 'Building Docker image...'
+                sh "docker build -t my-app:${IMAGE_TAG} ."
+            }
+        }
+
+        stage('Docker Push to ECR') {
+            steps {
+                echo 'Logging into AWS ECR and pushing image...'
+                sh '''
+                    aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+                    docker tag my-app:${IMAGE_TAG} $ECR_REPO:${IMAGE_TAG}
+                    docker push $ECR_REPO:${IMAGE_TAG}
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo ' Build completed successfully'
+            echo 'Build and Docker push completed successfully'
         }
         failure {
-            echo ' Build failed'
+            echo 'Build failed'
         }
     }
 }
